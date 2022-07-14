@@ -2,7 +2,7 @@
 
 use crate::{
     cmd::{
-        forge::install::{install, DependencyInstallOpts},
+        forge::install::{install, DependencyInstallOpts, git_status_clean},
         Cmd,
     },
     opts::forge::Dependency,
@@ -89,6 +89,16 @@ impl Cmd for InitArgs {
                     r#"{}: `forge init` cannot be run on a non-empty directory.
 
         run `forge init --force` to initialize regardless."#,
+                    Paint::red("error")
+                );
+                std::process::exit(1);
+            }
+
+            if !no_commit && !git_status_clean(&root)? {
+                eprintln!(
+                    r#"{}: `forge init` cannot be run on a dirty git repository.
+
+        run `forge init --no-commit` to initialize regardless."#,
                     Paint::red("error")
                 );
                 std::process::exit(1);

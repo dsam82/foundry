@@ -193,7 +193,7 @@ fn install_as_submodule(
 }
 
 // check that there are no modification in git working/staging area
-fn git_status_clean<P: AsRef<Path>>(root: P) -> eyre::Result<bool> {
+pub fn git_status_clean<P: AsRef<Path>>(root: P) -> eyre::Result<bool> {
     let stdout =
         Command::new("git").args(&["status", "--short"]).current_dir(root).get_stdout_lossy()?;
     Ok(stdout.is_empty())
